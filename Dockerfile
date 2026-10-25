@@ -1,5 +1,8 @@
 FROM ubuntu:24.04
 
+# upgrade: npm @anthropic-ai/claude-code
+ARG CLAUDE_CODE_VERSION=2.1.310
+
 ENV DEBIAN_FRONTEND=noninteractive LANG=C.UTF-8 PORT=7681
 
 # Base toolbox: shell tools, ssh server, ttyd web terminal, build deps.
@@ -14,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
        > /etc/apt/sources.list.d/github-cli.list \
   && apt-get update && apt-get install -y --no-install-recommends nodejs gh \
-  && npm install -g @anthropic-ai/claude-code \
+  && npm install -g "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}" \
   && curl -LsSf https://astral.sh/uv/install.sh | UV_INSTALL_DIR=/usr/local/bin sh \
   && mkdir -p /run/sshd \
   && sed -i 's/^worker_processes .*/worker_processes 2;/' /etc/nginx/nginx.conf \
